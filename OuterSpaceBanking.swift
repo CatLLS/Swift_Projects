@@ -173,19 +173,22 @@ func menuUser(_ b: inout [Usuario], _ userID: Int)->Void{
                 let valorDep = lerDouble(mensagem:"Insira a quantidade de créditos a serem depositados")
                 let transf = transferirGeral(valor:valorDep, idFonte:-1, idDestino: userID, bD:&b)
                 if  transf == -1{
-                    print("Pane de navegação! por algum motivo não foi possível fazer o depósito")
+                    print("Pane de navegação! Não foi possível fazer o depósito(transação proibida)")
                 }else if transf == -2{
-                    print("Pane de navegação! ")
+                    print("Pane de navegação! Saldo insuficiente")
                 }else{
                     print("Depósito de \(valorDep) créditos feita com sucesso!")
                 }
             case 3:
                 let idDestinoTransf = lerInt(mensagem:"Insira a chave estelar de destino da transferência")
                 let valorTransf = lerDouble(mensagem:"Insira a quantidade de créditos a serem transferidos")
-                if transferirGeral(valor:valorTransf, idFonte:userID, idDestino: idDestinoTransf, bD:&b) == -1 {
-                    print("Pane de navegação! por algum motivo não foi possível fazer a transferência")
+                let transf = transferirGeral(valor:valorTransf, idFonte:userID, idDestino: idDestinoTransf, bD:&b)
+                if  transf == -1{
+                    print("Pane de navegação! Não foi possível efetuar a transação(transação proibida)")
+                }else if transf == -2{
+                    print("Pane de navegação! Saldo insuficiente")
                 }else{
-                    print("Transferência de \(valorTransf) créditos para a chave \(idDestinoTransf)  feita com sucesso!")
+                    print("Transferência de \(valorTransf) créditos feita com sucesso!")
                 }
             case 4: menuInvestimento(&b,userID)
             case 5: return
@@ -201,22 +204,39 @@ func menuInvestimento(_ b: inout [Usuario],_ userID: Int)->Void{
 		    case 1:
 		        let deseja = lerInt(mensagem: "1 moeda starCoin custa 622 créditos, deseja comprar?(1=sim, 0=não)\nR")
 		        if deseja == 1{
-		            if transferirGeral(valor: 622, idFonte: userID , idDestino: -1, bD:&b) == -1 {
-		                print("Pane de navegação! por algum motivo não foi possível fazer a transferência")
-		            }else{
-		                print("Compra feita com sucesso!")
-		            }
+		            let transf = transferirGeral(valor: 622, idFonte: userID , idDestino: -1, bD:&b)
+		            if  transf == -1{
+                    print("Pane de navegação! Não foi possível efetuar a transação(transação proibida)")
+                    }else if transf == -2{
+                        print("Pane de navegação! Saldo insuficiente")
+                    }else{
+                        print("Transação de 622 créditos feita com sucesso!")
+                    }
 		        }
 		    case 2: 
 		        let deseja = lerInt(mensagem: "1 título de mineração em asteróides custa 100 créditos, deseja comprar?(1=sim, 0=não)\nR")
 		        if deseja == 1{
-		            if transferirGeral(valor: 100, idFonte: userID , idDestino: -1, bD:&b) == -1 {
-		                print("Pane de navegação! por algum motivo não foi possível fazer a transferência")
-		            }else{
-		                print("Compra feita com sucesso!")
-		            }
+		            let transf = transferirGeral(valor: 100, idFonte: userID , idDestino: -1, bD:&b) 
+		            if  transf == -1{
+                        print("Pane de navegação! Não foi possível efetuar a transação(transação proibida)")
+                    }else if transf == -2{
+                        print("Pane de navegação! Saldo insuficiente")
+                    }else{
+                        print("Transação de 100 créditos feita com sucesso!")
+                    }
 		        }
-		    case 3: return
+		    case 3: 
+		        let deseja = lerInt(mensagem: "1 pacote de Seguro Hiper-Espaço custa 10.000 créditos, deseja comprar?(1=sim, 0=não)\nR")
+		        if deseja == 1{
+		            let transf = transferirGeral(valor: 10000, idFonte: userID , idDestino: -1, bD:&b) 
+		            if  transf == -1{
+                        print("Pane de navegação! Não foi possível efetuar a transação(transação proibida)")
+                    }else if transf == -2{
+                        print("Pane de navegação! Saldo insuficiente")
+                    }else{
+                        print("Transação de 10.000 créditos feita com sucesso!")
+                    }
+		        }
 		    case 4: return
 		    default: print("Você vê o futuro? Nós ainda não temos nenhuma ação como essa disponível!\nOpção não encontrada, tente novamente")
 	    }
