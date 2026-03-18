@@ -1,9 +1,10 @@
+//Obs: este é um banco com temática espacial/cyberpunk + vibe jogos antigos de CLI
 //criando o formato do usuário 
 struct Usuario{
   var nome: String
   var senha: String
   var saldo: Double
-  let id: Int
+  let id: Int // O ID é constante (let), garantindo que a "chave estelar" não mude.
 }
 
 //-----------------Corpo de funções----------------------// 
@@ -34,7 +35,11 @@ func lerDouble(mensagem: String)->Double{
         print("Pane de navegação! Entrada inválida para tipo esperado!")
     }
 }
-
+/* LÓGICA DE BUSCA:
+Esta função é o motor de busca do sistema. Ela percorre o array 'baseDeDados'
+e retorna o índice (posição) do usuário se encontrar uma correspondência. Eu fiz ela para
+procurar por qualquer tipo, caso precisasse, mas acabei não usando.
+*/
 func encontrarUsuario(_ baseDeDados: [Usuario], _ info: String, _ tipoInfo: String)->Int{
         switch tipoInfo{
         case "nome":
@@ -62,7 +67,7 @@ func encontrarUsuario(_ baseDeDados: [Usuario], _ info: String, _ tipoInfo: Stri
 
 func criarConta(_ b: inout [Usuario])->Void{
     let i = lerInt(mensagem:"insira sua chave estelar única")
-	if( !(encontrarUsuario(b,String(i),"id") == -1) ){
+	if( !(encontrarUsuario(b,String(i),"id") == -1) ){ // Validação de unicidade: impede que dois usuários tenham o mesmo ID.
 	    print("Sinto muito, esta chave já está registrada em nosso sistema, talvez você quisesse fazer login ao invés de criar uma conta nova?")
 	    return
 	}
@@ -73,7 +78,10 @@ func criarConta(_ b: inout [Usuario])->Void{
 	b.append(novoUsuario)
 	print("Conta criada com sucesso! Bem vindo a união estelar \(nome), seu código de identificação é \(novoUsuario.id)! utilize esta chave estelar única para logar!")
 }
-
+/* LÓGICA DE AUTENTICAÇÃO:
+   O login valida duas etapas: 1. A existência do ID na base. 2. Se a senha
+   fornecida coincide com a senha armazenada naquele índice.
+*/
 func fazerLogin(_ b: [Usuario])->Int{
     //retorno: -1=erro, 0=admin, else=id do user
     let id = lerString(mensagem:"Insira sua chave estelar de identificação")
@@ -128,6 +136,12 @@ func menuAdmin(_ baseDeDados: inout [Usuario])->Void{
     }
 }
 
+/* LÓGICA DE TRANSAÇÃO (O núcleo financeiro):
+   Esta função centraliza Depósitos, Investimentos e Transferências.
+   - idFonte -1: Representa uma entrada externa de dinheiro (Depósito).
+   - idDestino -1: Representa uma saída para o "Banco/Mercado" (Investimento).
+   - idFonte e idDestino positivos: Transferência entre usuários.
+*/
 //retorna 0=sucesso, -1=erro
 //idFonte 0=proibido, -1=depósito
 //idDestino 0=proibido, -1=investimento(dinheiro vai para o banco)
