@@ -14,7 +14,7 @@ func lerString(mensagem: String)-> String{
         if let entrada=readLine(), !entrada.isEmpty{
             return entrada
         }
-        print("Pane de navegação! Entrada inválida para tipo esperado!")
+        print("\nPane de navegação! Entrada inválida para tipo esperado!")
     }
 }
 func lerInt(mensagem: String)->Int{
@@ -23,7 +23,7 @@ func lerInt(mensagem: String)->Int{
         if let entrada=readLine(), let entradaInt = Int(entrada){
             return entradaInt
         }
-        print("Pane de navegação! Entrada inválida para tipo esperado!")
+        print("\nPane de navegação! Entrada inválida para tipo esperado!")
     }
 }
 func lerDouble(mensagem: String)->Double{
@@ -32,7 +32,7 @@ func lerDouble(mensagem: String)->Double{
         if let entrada=readLine(), let entradaD = Double(entrada){
             return entradaD
         }
-        print("Pane de navegação! Entrada inválida para tipo esperado!")
+        print("\nPane de navegação! Entrada inválida para tipo esperado!")
     }
 }
 /* LÓGICA DE BUSCA:
@@ -68,7 +68,7 @@ func encontrarUsuario(_ baseDeDados: [Usuario], _ info: String, _ tipoInfo: Stri
 func criarConta(_ b: inout [Usuario])->Void{
     let i = lerInt(mensagem:"insira sua chave estelar única")
 	if( !(encontrarUsuario(b,String(i),"id") == -1) ){ // Validação de unicidade: impede que dois usuários tenham o mesmo ID.
-	    print("Sinto muito, esta chave já está registrada em nosso sistema, talvez você quisesse fazer login ao invés de criar uma conta nova?")
+	    print("\nSinto muito, esta chave já está registrada em nosso sistema, talvez você quisesse fazer login ao invés de criar uma conta nova?")
 	    return
 	}
 	let nome = lerString(mensagem:"Insira seu nome")
@@ -76,7 +76,7 @@ func criarConta(_ b: inout [Usuario])->Void{
 	let saldo = lerDouble(mensagem:"Insira o saldo inicial(se não houver nenhum, digite 0)") 
 	let novoUsuario = Usuario(nome: nome, senha:senha, saldo: saldo, id: i)
 	b.append(novoUsuario)
-	print("Conta criada com sucesso! Bem vindo a união estelar \(nome), seu código de identificação é \(novoUsuario.id)! utilize esta chave estelar única para logar!")
+	print("\nConta criada com sucesso! Bem vindo a união estelar \(nome), seu código de identificação é \(novoUsuario.id)! utilize esta chave estelar única para logar!")
 }
 /* LÓGICA DE AUTENTICAÇÃO:
    O login valida duas etapas: 1. A existência do ID na base. 2. Se a senha
@@ -87,16 +87,15 @@ func fazerLogin(_ b: [Usuario])->Int{
     let id = lerString(mensagem:"Insira sua chave estelar de identificação")
     let senha = lerString(mensagem:"Insira sua senha")
     let posicao = encontrarUsuario(b,id,"id")
-    if b[posicao].senha==senha {
-        print("Bem vindo(a) \(b[posicao].nome)")
+    if !(posicao == -1) && (b[posicao].senha==senha) {
+        print("\nBem vindo(a) \(b[posicao].nome)")
     }else{
-        print("Intruso detectado: Senha incorreta. Tente novamente")
+        print("\nIntruso detectado: Senha incorreta. Tente novamente")
         return -1
-    }
-                
+    }            
     switch posicao{
         case -1:
-            print("Usuário \(id) não encontrado")
+            print("\nUsuário \(id) não encontrado")
         case 0:
             print("\nHá quanto tem Admin! Sentimos sua falta, há muito trabalho a fazer...")
             return 0
@@ -110,28 +109,28 @@ func fazerLogin(_ b: [Usuario])->Int{
 func menuAdmin(_ baseDeDados: inout [Usuario])->Void{
     var goBack = false
     while (!goBack){
-        let res = lerInt(mensagem:"Portal do Comandante:\n 1.Listar Todas as Contas\n 2.Deletar Conta\n 3.Logout\nR")
+        let res = lerInt(mensagem:"\n.𖥔 ݁ ˖ִ ࣪⚝₊ ⊹˚.𖥔 ݁ ˖ִ ࣪⚝₊ ⊹˚.𖥔 ݁ ˖ִ ࣪⚝₊ ⊹˚.𖥔 ݁ ˖ִ ࣪⚝₊ ⊹˚\nPortal do Comandante:\n 1.Listar Todas as Contas\n 2.Deletar Conta\n 3.Logout\nR")
         switch res{
             case 1:
                 for user in baseDeDados{
                     print("\nID: \(user.id) \n- Nome: \(user.nome) \n-Saldo: \(user.saldo)")
                 }
             case 2:
-                let chaveDeletar = lerString(mensagem:"Caro comandante, digite a chave estelar do usuário que deseja deletar")
+                let chaveDeletar = lerString(mensagem:"\nCaro comandante, digite a chave estelar do usuário que deseja deletar")
                 if chaveDeletar == "0"{
                     print("\nCaro Admin, a união estelar não permitirá sua demissão tão cedo!")
                 }else{
                     let cD = encontrarUsuario(baseDeDados,chaveDeletar,"id")
                     if cD != -1{
-                        print("Usuário: \(baseDeDados[cD].nome) deletado com sucesso!")
+                        print("\nUsuário: \(baseDeDados[cD].nome) deletado com sucesso!")
                         baseDeDados.remove(at: cD)
                     }else{
-                        print("Usuário não encontrado, tente novamente.")
+                        print("\nUsuário não encontrado, tente novamente.")
                     }
                 }
             case 3: goBack = true
             default: 
-                print("Você vê o futuro? Nós ainda não temos nenhuma ação como essa disponível!\nOpção não encontrada, tente novamente")
+                print("\nVocê vê o futuro? Nós ainda não temos nenhuma ação como essa disponível!\nOpção não encontrada, tente novamente")
         }
     }
 }
@@ -164,7 +163,9 @@ func transferirGeral(valor: Double, idFonte: Int, idDestino: Int, bD: inout [Usu
     if idDestino != -1 && destino == -1{return -1}//não é investimento e não tem destino
     //4. Execução da transação
     if idFonte == -1{//quando id = -1 significa que é depósito, pq a fonte é externa
-        bD[destino].saldo += valor
+        if valor > 0{
+			bD[destino].saldo += valor
+		}else{return -2}
     }else if idDestino == -1{//investimento (dinheiro vai para o banco
         if bD[fonte].saldo < valor{return -2}
         bD[fonte].saldo -= valor
@@ -178,7 +179,8 @@ func transferirGeral(valor: Double, idFonte: Int, idDestino: Int, bD: inout [Usu
 
 func menuUser(_ b: inout [Usuario], _ userID: Int)->Void{
     while(true){
-        let res = lerInt(mensagem:"Hub Financeiro:\n 1.Status da Conta/ver saldo\n 2. Injetar Créditos - Depósito\n 3.Transferência de créditos\n 4.Central de investimentos\n 5.Logout\nR")
+		
+        let res = lerInt(mensagem:"\n⋆⭒˚.⋆🔭⋆⭒˚.⋆🔭⋆⭒˚.⋆🔭⋆⭒˚.⋆🔭⋆⭒˚.⋆🔭⋆⭒˚.⋆🔭\nHub Financeiro:\n 1.Status da Conta/ver saldo\n 2. Injetar Créditos - Depósito\n 3.Transferência de créditos\n 4.Central de investimentos\n 5.Logout\nR")
         switch res{
             case 1: 
                 let user = b[userID]
@@ -187,26 +189,26 @@ func menuUser(_ b: inout [Usuario], _ userID: Int)->Void{
                 let valorDep = lerDouble(mensagem:"Insira a quantidade de créditos a serem depositados")
                 let transf = transferirGeral(valor:valorDep, idFonte:-1, idDestino: userID, bD:&b)
                 if  transf == -1{
-                    print("Pane de navegação! Não foi possível fazer o depósito(transação proibida)")
+                    print("\nPane de navegação! Não foi possível fazer o depósito(transação proibida)")
                 }else if transf == -2{
-                    print("Pane de navegação! Saldo insuficiente")
+                    print("\nPane de navegação! Saldo insuficiente")
                 }else{
-                    print("Depósito de \(valorDep) créditos feita com sucesso!")
+                    print("\nDepósito de \(valorDep) créditos feita com sucesso!")
                 }
             case 3:
                 let idDestinoTransf = lerInt(mensagem:"Insira a chave estelar de destino da transferência")
                 let valorTransf = lerDouble(mensagem:"Insira a quantidade de créditos a serem transferidos")
                 let transf = transferirGeral(valor:valorTransf, idFonte:userID, idDestino: idDestinoTransf, bD:&b)
                 if  transf == -1{
-                    print("Pane de navegação! Não foi possível efetuar a transação(transação proibida)")
+                    print("\nPane de navegação! Não foi possível efetuar a transação(transação proibida)")
                 }else if transf == -2{
-                    print("Pane de navegação! Saldo insuficiente")
+                    print("\nPane de navegação! Saldo insuficiente")
                 }else{
-                    print("Transferência de \(valorTransf) créditos feita com sucesso!")
+                    print("\nTransferência de \(valorTransf) créditos feita com sucesso!")
                 }
             case 4: menuInvestimento(&b,userID)
             case 5: return
-            default:  print("Você vê o futuro? Nós ainda não temos nenhuma ação como essa disponível!\nOpção não encontrada, tente novamente")
+            default:  print("\nVocê vê o futuro? Nós ainda não temos nenhuma ação como essa disponível!\nOpção não encontrada, tente novamente")
         }
     }
 }
@@ -216,48 +218,89 @@ func menuInvestimento(_ b: inout [Usuario],_ userID: Int)->Void{
 		let resposta = lerInt(mensagem:"\nMercado de Futuros Galáticos:\n 1.Comprar starCoin - Crypto\n 2.Títulos de Mineração em Asteroides\n 3.Seguro Hiper-Espaço\n 4.Voltar\nR")
 		switch resposta{
 		    case 1:
-		        let deseja = lerInt(mensagem: "1 moeda starCoin custa 622 créditos, deseja comprar?(1=sim, 0=não)\nR")
+		        let deseja = lerInt(mensagem: "\n1 moeda starCoin custa 622 créditos, deseja comprar?(1=sim, 0=não)\nR")
 		        if deseja == 1{
 		            let transf = transferirGeral(valor: 622, idFonte: userID , idDestino: -1, bD:&b)
 		            if  transf == -1{
-                    print("Pane de navegação! Não foi possível efetuar a transação(transação proibida)")
+                    print("\nPane de navegação! Não foi possível efetuar a transação(transação proibida)")
                     }else if transf == -2{
-                        print("Pane de navegação! Saldo insuficiente")
+                        print("\nPane de navegação! Saldo insuficiente")
                     }else{
-                        print("Transação de 622 créditos feita com sucesso!")
+                        print("\nTransação de 622 créditos feita com sucesso!")
                     }
 		        }
 		    case 2: 
-		        let deseja = lerInt(mensagem: "1 título de mineração em asteróides custa 100 créditos, deseja comprar?(1=sim, 0=não)\nR")
+		        let deseja = lerInt(mensagem: "\n1 título de mineração em asteróides custa 100 créditos, deseja comprar?(1=sim, 0=não)\nR")
 		        if deseja == 1{
 		            let transf = transferirGeral(valor: 100, idFonte: userID , idDestino: -1, bD:&b) 
 		            if  transf == -1{
-                        print("Pane de navegação! Não foi possível efetuar a transação(transação proibida)")
+                        print("\nPane de navegação! Não foi possível efetuar a transação(transação proibida)")
                     }else if transf == -2{
-                        print("Pane de navegação! Saldo insuficiente")
+                        print("\nPane de navegação! Saldo insuficiente")
                     }else{
-                        print("Transação de 100 créditos feita com sucesso!")
+                        print("\nTransação de 100 créditos feita com sucesso!")
                     }
 		        }
 		    case 3: 
-		        let deseja = lerInt(mensagem: "1 pacote de Seguro Hiper-Espaço custa 10.000 créditos, deseja comprar?(1=sim, 0=não)\nR")
+		        let deseja = lerInt(mensagem: "\n1 pacote de Seguro Hiper-Espaço custa 10.000 créditos, deseja comprar?(1=sim, 0=não)\nR")
 		        if deseja == 1{
 		            let transf = transferirGeral(valor: 10000, idFonte: userID , idDestino: -1, bD:&b) 
 		            if  transf == -1{
-                        print("Pane de navegação! Não foi possível efetuar a transação(transação proibida)")
+                        print("\nPane de navegação! Não foi possível efetuar a transação(transação proibida)")
                     }else if transf == -2{
-                        print("Pane de navegação! Saldo insuficiente")
+                        print("\nPane de navegação! Saldo insuficiente")
                     }else{
-                        print("Transação de 10.000 créditos feita com sucesso!")
+                        print("\nTransação de 10.000 créditos feita com sucesso!")
                     }
 		        }
 		    case 4: return
-		    default: print("Você vê o futuro? Nós ainda não temos nenhuma ação como essa disponível!\nOpção não encontrada, tente novamente")
+		    default: print("\nVocê vê o futuro? Nós ainda não temos nenhuma ação como essa disponível!\nOpção não encontrada, tente novamente")
 	    }
 	}
 }
+let op0 = #"""
+╭───────────────────.★..─╮
+ ...IN A GALAXY FAR AWAY..
+╰─..★.───────────────────╯
+"""#
 
+let op1 = #"""
+               ／ |
+              /　 ;　　
+             °    |　: /\ _/\
+             | 　'i,　 (  °ω-) =★
+      ★　 'i 　   ﾄ､_u_    　.
+   　       .　'i 　 　　   U U￣￣ ;'
+   　　       　　丶,　　 　　 　　。ﾟ　★
+            　。ﾟ　　　' ｰ- - - '´´
+"""#
+let op2 = #"""
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠖⠃⠀⠀⠀⡁⠀⠀⠀⠀⠀⠐⠆⠀⠀⠀⠀⠀⠀⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡠⢔⡤⠊⠁⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⠀⠀⠀⠁⠀⠀⠘⠁⢀⠀⠀⠀⠀⢈⠓⠂⠠⡄⠀⠈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣶⠿⠞⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠒⠁⠀⠠⡚⠁⢀⣙⣀⣈⡩⠬⢁⠀⢑⠶⠤⡆⠤⡀⠀⠀⠀⠀⠀⠀⢀⠴⢲⣋⣽⣷⠟⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⠀⢠⠀⠀⣶⠃⠗⣡⣶⣮⣿⡿⠿⠿⢿⣿⣷⣶⣤⣤⠤⠴⠦⠬⣤⣤⠄⣉⠉⠝⢲⣿⡷⠻⠂⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠀⠀⠀⠀⠁⡀⡸⠁⣰⣿⡿⠛⠋⣁⡀⠤⠤⢄⡀⠈⠛⢯⣿⣟⣾⣶⣶⣮⣭⣵⣾⣿⣟⠿⠉⢨⠖⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⠀⢠⠳⡧⣻⡿⠋⢀⠒⠉⠀⠀⠀⠀⠀⠀⠉⠢⠀⠀⠙⠛⣻⣿⣿⣿⢿⣿⣿⠟⡱⠖⠊⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⢠⣧⠓⣾⣿⠁⠀⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⢦⣠⣾⣿⠿⣿⣿⣿⡿⣫⠏⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠀⠂⢃⣸⣿⠇⢠⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣴⣿⠟⢿⠁⠸⡿⣿⣯⡶⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⢘⡄⠘⣿⣿⠀⠸⡀⠀⠀⠀⠀⠀⢀⣀⣴⣾⣿⡿⡟⡋⠐⡇⠀⢸⣿⣿⠃⠀⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢡⠘⢰⣿⡿⡆⠀⣇⠀⣀⣠⣤⣶⣿⢷⢟⠻⠀⠈⠀⠀⠀⡇⠀⣼⣿⣿⠂⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠔⢀⡴⢯⣾⠟⡏⢀⣠⣿⣿⣿⣟⢟⡋⠅⠘⠉⠀⠀⠀⠀⢀⠀⠁⢠⣿⣟⠃⠀⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⠞⣻⣷⡿⢙⣩⣶⡿⠿⠛⠉⠑⢡⡁⠀⠀⠀⠀⠀⠀⢀⠔⠁⠀⣰⣿⣿⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣡⣾⣥⣾⢫⡦⠾⠛⠙⠉⠀⠀⢀⣀⠀⠈⠙⠓⠦⠤⠤⠀⠘⠁⢀⡤⣾⡿⠏⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠔⣴⣾⣿⣿⢟⢝⠢⠃⢀⣤⢴⣾⣮⣷⣶⢿⣶⡤⣐⡀⠀⣠⣤⢶⣪⣿⣿⡿⠟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⡀⣦⣾⡿⡛⠵⠺⢈⡠⠶⠿⠥⠥⡭⠉⠉⢱⡛⠻⠿⣿⣿⣿⣿⣿⠿⠿⠿⠟⠭⠛⠂⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⢀⢴⠕⣋⠝⠕⠐⠀⠔⠉⠀⠀⠀⠀⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠁⠉⠁⠁⠁⠁⠈⠀⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⢀⣠⠁⠈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀LUMEN-NEXUS BANKING, PARA O INFINITO E ALÉM⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 
+"""#
+let op3 = #"""
+˚　　　　✦　　　.　　. 🪐　　.　　　　 　　.　　　　　　 ✦　　　.　　˚　🌒　　　　. ✦ 　🌍  
+ 　　. 　 　　　˚　　　　　*　　 　　✦　　　.　　.　　　✦　　˚ 　　　 　　˚　.　*　　. 　˚　　.
+"""#
 //--------------------MAIN-LOOP--------------------------//
 var baseDeDados: [Usuario] = [
 Usuario(nome:"ADMIN", senha: "1234", saldo: 0, id: 0000),
@@ -265,7 +308,9 @@ Usuario(nome: "testuser622", senha: "4567", saldo: 10, id: 0001)
 ]
 var proximoID = 2
 var sistemaAtivo=true
+print(op0)
 while sistemaAtivo{
+	print(op2)
 	let resposta = lerInt(mensagem:"\nO que deseja fazer em nossa estação?\n 1.Criar registro estelar(nova conta)\n 2.Logar por neural link\n 3.Desligar terminal\nR")
 		switch resposta{
 			case 1: criarConta(&baseDeDados)
@@ -277,8 +322,9 @@ while sistemaAtivo{
 			    }
 			case 3: sistemaAtivo=false
 			default: 
-				print("Você vê o futuro? Nós ainda não temos nenhuma ação como essa disponível!\nOpção não encontrada, tente novamente")
+				print("\nVocê vê o futuro? Nós ainda não temos nenhuma ação como essa disponível!\nOpção não encontrada, tente novamente")
 		}
 	
 }
+print(op1)
 print("Obrigado por usar o sistema bancário interestelar Lumen Nexus!")
